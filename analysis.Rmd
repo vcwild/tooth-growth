@@ -10,11 +10,9 @@ output: pdf_document
 
 ## Setup
 
-```{r setup, include=FALSE}
+```{r setup, include=TRUE}
 knitr::opts_chunk$set(echo = TRUE, cache = TRUE, warning = FALSE)
 ```
-
-Load the ToothGrowth data and perform some basic exploratory data analyses.
 
 ### Provide a basic summary of the data
 
