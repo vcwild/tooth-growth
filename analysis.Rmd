@@ -3,6 +3,9 @@ title: "Inferential Data Analysis"
 author: "Victor Wildner"
 output: pdf_document
 ---
+
+## Overview
+
 > In this project, we are going to explore the ToothGrowth R dataset and do inferential data analysis for our hypotheses
 
 ## Setup
