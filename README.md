@@ -31,7 +31,7 @@ reproducibility.
   - **[Infsim.Rmd](https://github.com/vcwild/tooth-growth/blob/master/analysis.Rmd)**:
     the script to compile the project from source
 
-## CODEBOOK
+# CODEBOOK
 
 ## Setup
 
@@ -103,9 +103,9 @@ hist(data$len, col = "slateblue1", main = "Histogram of Tooth Length", xlab = "T
 
 ## Inferential Analysis
 
-### Use confidence intervals and/or hypothesis tests to compare tooth growth by supp and dose
+#### Use confidence intervals and/or hypothesis tests to compare tooth growth by supp and dose
 
-#### Hypotesis 1 - Relation between tooth length and the supplement used
+### Hypotesis 1 - Relation between tooth length and the supplement used
 
 ``` r
 # Separate value vectors for analysis
@@ -141,7 +141,7 @@ using Vitamin C across all dosages is less than that of Orange Juice,
 implying that the tooth length is directly affected by the supplement
 used.
 
-#### Hypothesis 2 - Comparing tooth growth by dose
+### Hypothesis 2 - Comparing tooth growth by dose
 
 ``` r
 # Separate value vectors for analysis
