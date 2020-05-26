@@ -32,7 +32,7 @@ The project is set in literate programming, allowing full research reproducibili
     the script to compile the project from source
 
 
-## CODEBOOK
+# CODEBOOK
 
 ## Setup
 
@@ -70,9 +70,9 @@ hist(data$len, col = "slateblue1", main = "Histogram of Tooth Length", xlab = "T
 
 ## Inferential Analysis
 
-### Use confidence intervals and/or hypothesis tests to compare tooth growth by supp and dose
+#### Use confidence intervals and/or hypothesis tests to compare tooth growth by supp and dose
 
-#### Hypotesis 1 - Relation between tooth length and the supplement used
+### Hypotesis 1 - Relation between tooth length and the supplement used
 
 
 ```{r hypone}
@@ -92,7 +92,7 @@ The p-value shows strong evidence to reject the null hypothesis (pval < 0.05), i
 
 We can confirm with a 95% confidence interval that the tooth length by using Vitamin C across all dosages is less than that of Orange Juice, implying that the tooth length is directly affected by the supplement used.
 
-#### Hypothesis 2 - Comparing tooth growth by dose
+### Hypothesis 2 - Comparing tooth growth by dose
 
 ```{r hyptwoless}
 # Separate value vectors for analysis
