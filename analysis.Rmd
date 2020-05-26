@@ -1,0 +1,109 @@
+---
+title: "Inferential Data Analysis"
+author: "Victor Wildner"
+output: pdf_document
+---
+> In this project, we are going to explore the ToothGrowth R dataset and do inferential data analysis for our hypotheses
+
+## Setup
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache = TRUE, warning = FALSE)
+```
+
+Load the ToothGrowth data and perform some basic exploratory data analyses.
+
+### Provide a basic summary of the data
+
+Loading required packages and data set
+
+```{r libs}
+require(tidyverse)
+data <- ToothGrowth
+```
+
+## Exploratory Data Analysis
+
+### Summary of the data
+
+```{r summary}
+means <- data %>% 
+    group_by(supp, dose) %>% 
+    summarize(tooth.length = mean(len))
+
+means
+# Classes
+nclass = round(sqrt(length(data$len)))
+hist(data$len, col = "slateblue1", main = "Histogram of Tooth Length", xlab = "Tooth Length", nclass = nclass)
+
+# OJ - orange juice
+# VC - vitamin C
+```
+
+
+## Inferential Analysis
+
+### Use confidence intervals and/or hypothesis tests to compare tooth growth by supp and dose
+
+#### Hypotesis 1 - Relation between tooth length and the supplement used
+
+
+```{r hypone}
+# Separate value vectors for analysis
+supp = data$supp
+
+len_by_OJ = data$len[supp == "OJ"] # Mean
+len_by_VC = data$len[supp == "VC"]
+
+# T-test: non-paired, variance based on approx of df, t < mean
+t.test(len_by_VC, len_by_OJ, conf.level = .95, var.equal = FALSE, paired = FALSE, alternative = "less")
+```
+
+The p-value shows strong evidence to reject the null hypothesis (pval < 0.05), indicating there is correlation between the tooth length and the supplement used.
+
+### Hypothesis Conclusion
+
+We can confirm with a 95% confidence interval that the tooth length by using Vitamin C across all dosages is less than that of Orange Juice, implying that the tooth length is directly affected by the supplement used.
+
+#### Hypothesis 2 - Comparing tooth growth by dose
+
+```{r hyptwoless}
+# Separate value vectors for analysis
+half = data$len[data$dose == .5]
+one = data$len[data$dose == 1] # Mean
+two = data$len[data$dose == 2]
+
+# Dose one is considered the mean sample for testing
+
+# T-test, non-paired, var by approx of df, t < mean
+t.test(half, one, alternative = "less", paired = FALSE, var.equal = FALSE, conf.level = .95)
+```
+
+The p-value shows strong evidence to reject the null hypothesis (pval < 0.05), indicating there is correlation between lower supplement doses and tooth length.
+
+```{r hyptwogreater}
+# T-test, non-paired, var by approx of df, t > mean
+t.test(two, one, alternative = "greater", paired = FALSE, var.equal = FALSE, conf.level = .95)
+```
+
+The p-value shows strong evidence to reject the null hypothesis (pval < 0.05), indicating there is correlation between higher supplement doses and tooth length.
+
+### Hypothesis Conclusion
+
+We can confirm with a 95% confidence interval that the supplement dosage rate interferes with tooth growth.
+
+We can visualize this statement as the plot shows:
+
+```{r concplot}
+ggplot(data, aes(dose, len, group = supp, fill = supp)) +
+    geom_bar(stat = "identity", position = "dodge", color = "white") +
+    labs(
+        x = "Dose",
+        y = "Tooth Length",
+        fill = "Supplement"
+    ) +
+    coord_flip() +
+    theme_minimal()
+```
+
+
