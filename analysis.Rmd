@@ -74,52 +74,108 @@ hist(data$len, col = "slateblue1", main = "Histogram of Tooth Length", xlab = "T
 
 ### Hypotesis 1 - Relation between tooth length and the supplement used
 
-
-```{r hypone}
-# Separate value vectors for analysis
+```{r powerone}
+# Separate samples for analysis
 supp = data$supp
 
-len_by_OJ = data$len[supp == "OJ"] # Mean
-len_by_VC = data$len[supp == "VC"]
+len_by_OJ = data$len[supp == "OJ"] #sample_b
+len_by_VC = data$len[supp == "VC"] #sample_a
 
-# T-test: non-paired, variance based on approx of df, t < mean
-t.test(len_by_VC, len_by_OJ, conf.level = .95, var.equal = FALSE, paired = FALSE, alternative = "less")
+delta = abs(mean(len_by_OJ) - mean(len_by_VC))
+pooledsd = (sd(len_by_OJ) + sd(len_by_VC))/2
+t1_error = 0.05
+
+# Statistical Power
+
+power.t.test(n = length(len_by_VC), sig.level = t1_error, delta = delta, sd = pooledsd, alternative = "one.sided", type = "two.sample")$power
+
 ```
 
-The p-value shows strong evidence to reject the null hypothesis (pval < 0.05), indicating there is correlation between the tooth length and the supplement used.
+The statistical power for the t-test is too low!! (below .80)
+
+The outcome of the t-test can result in a false positive!
+
+```{r hypone}
+# The Null Hypothesis
+# H0: µa >= µb
+# The Alternative Hypothesis
+# Ha: µa < µb
+
+# T-test: non-paired, variance based on approx of df, µa < H0
+t.test(len_by_VC, len_by_OJ, conf.level = .95, var.equal = TRUE, paired = FALSE, alternative = "less")$p.value
+```
+
+
+The p-value shows strong evidence to reject the null hypothesis (pval < 0.05), indicating  high significance for the alternative hypothesis between the tooth length and the supplement used.
 
 ### Hypothesis Conclusion
 
-We can confirm with a 95% confidence interval that the tooth length by using Vitamin C across all dosages is less than that of Orange Juice, implying that the tooth length is directly affected by the supplement used.
+We can imply that the p-value for this observation is too high in relation to the threshold, and the statistical power of the analysis is too low, meaning that the alternative hypothesis may be a false positive.
 
 ### Hypothesis 2 - Comparing tooth growth by dose
 
-```{r hyptwoless}
-# Separate value vectors for analysis
-half = data$len[data$dose == .5]
-one = data$len[data$dose == 1] # Mean
-two = data$len[data$dose == 2]
+```{r hyptwopower}
+# Separate samples for analysis
+half = data$len[data$dose == .5] # sample_a
+one = data$len[data$dose == 1] # sample_b
+two = data$len[data$dose == 2] # sample_c
 
-# Dose one is considered the mean sample for testing
+length(half) == length(one)
 
-# T-test, non-paired, var by approx of df, t < mean
-t.test(half, one, alternative = "less", paired = FALSE, var.equal = FALSE, conf.level = .95)
+delta = abs(mean(half) - mean(one))
+pooledsd = (sd(half) + sd(one))/2
+t1_error = 0.05
+
+# Statistical Power
+
+power.t.test(n = length(half), sig.level = t1_error, delta = delta, sd = pooledsd, alternative = "one.sided", type = "two.sample")$power
 ```
 
-The p-value shows strong evidence to reject the null hypothesis (pval < 0.05), indicating there is correlation between lower supplement doses and tooth length.
+Very high Statistical Power, meaning the outcome of the t-test is very accurate!!
+
+```{r hyptwoless}
+# The Null Hypothesis
+# H0: µa >= µb
+# The Alternative Hypothesis
+# Ha: µa < µb
+
+# T-test, non-paired, var by approx of df, µa < µb
+t.test(half, one, alternative = "less", paired = FALSE, var.equal = TRUE, conf.level = .95)$p.value
+```
+
+The p-value shows strong evidence to reject the null hypothesis (pval < 0.05), indicating proof for the alternative hypothesis between lower supplement doses and tooth length.
+
+```{r hyptwopower2}
+length(two) == length(one)
+
+delta = abs(mean(two) - mean(one))
+pooledsd = (sd(two) + sd(one))/2
+t1_error = 0.05
+
+# Statistical Power
+
+power.t.test(n = length(two), sig.level = t1_error, delta = delta, sd = pooledsd, alternative = "one.sided", type = "two.sample")$power
+```
+
+Very high Statistical Power, meaning the outcome of the t-test is very accurate!!
 
 ```{r hyptwogreater}
-# T-test, non-paired, var by approx of df, t > mean
-t.test(two, one, alternative = "greater", paired = FALSE, var.equal = FALSE, conf.level = .95)
+# The Null Hypothesis
+# H0: µc <= µb
+# The Alternative Hypothesis
+# Ha: µc > µb
+
+# T-test, non-paired, var by approx of df, µc > µb
+t.test(two, one, alternative = "greater", paired = FALSE, var.equal = TRUE, conf.level = .95)$p.value
 ```
 
-The p-value shows strong evidence to reject the null hypothesis (pval < 0.05), indicating there is correlation between higher supplement doses and tooth length.
+The p-value shows strong evidence to reject the null hypothesis (pval < 0.05), indicating proof for the alternative hypothesis between higher supplement doses and tooth length.
 
 ### Hypothesis Conclusion
 
-We can confirm with a 95% confidence interval that the supplement dosage rate interferes with tooth growth.
+We can confirm with a 95% confidence interval that, for the true population distribution, the supplement dosage level interfere with tooth growth.
 
-We can visualize this statement as the plot shows:
+We can visualize this statement in the following plot:
 
 ```{r concplot}
 ggplot(data, aes(dose, len, group = supp, fill = supp)) +
