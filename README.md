@@ -136,10 +136,11 @@ supplement used.
 
 ### Hypothesis Conclusion
 
-We can confirm with a 95% confidence interval that the tooth length by
+We can confirm with a 95% confidence interval that, for the true population distribution, the tooth length by
 using Vitamin C across all dosages is less than that of Orange Juice,
-implying that the tooth length is directly affected by the supplement
-used.
+implying that the type of supplement used may affect the tooth length. 
+
+Alternatively, we can imply that the p-value for this observation is too high in relation to the threshold, meaning that this statement can be a false positive.
 
 ### Hypothesis 2 - Comparing tooth growth by dose
 
@@ -194,8 +195,7 @@ and tooth length.
 
 ### Hypothesis Conclusion
 
-We can confirm with a 95% confidence interval that the supplement dosage
-rate interferes with tooth growth.
+We can confirm with a 95% confidence interval that, for the true population distribution, the supplement dosage interferes with tooth growth.
 
 We can visualize this statement as the plot shows:
 
