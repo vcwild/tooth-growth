@@ -1,12 +1,38 @@
 ---
-title: "Inferential Data Analysis"
-author: "Victor Wildner"
-output: pdf_document
+title: "Tooth Growth Analysis"
+output: github_document
 ---
 
-## Overview
+In this project, we are going to explore the ToothGrowth R dataset and do inferential data analysis aiming to answer the following questions: 
 
-> In this project, we are going to explore the ToothGrowth R dataset and do inferential data analysis for our hypotheses
+1 - Is there a relation between tooth length and supplement used? 
+
+2 - Does changing the supplement dosage interfere with the tooth length?
+
+The project is set in literate programming, allowing full research reproducibility.
+
+## Tools Used
+
+  - R language compiler
+  - R base graphic devices
+  - Tidyverse library packages
+  - RMarkdown library package
+  - Knitr library
+    package
+
+## Files
+
+  - **[CODEBOOK](https://github.com/vcwild/tooth-growth/blob/master/analysis.pdf)**:
+    step-by-step book explaining the code
+    processing.
+  - **[Figures](https://github.com/vcwild/tooth-growth/tree/master/analysis_files/figure-gfm)**:
+    the plotted
+    images
+  - **[Infsim.Rmd](https://github.com/vcwild/tooth-growth/blob/master/analysis.Rmd)**:
+    the script to compile the project from source
+
+
+## CODEBOOK
 
 ## Setup
 
