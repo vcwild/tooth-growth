@@ -195,8 +195,7 @@ and tooth length.
 
 ### Hypothesis Conclusion
 
-We can confirm with a 95% confidence interval that the supplement dosage
-rate interferes with tooth growth.
+We can confirm with a 95% confidence interval that, for the true population distribution, the supplement dosage interferes with tooth growth.
 
 We can visualize this statement as the plot shows:
 
