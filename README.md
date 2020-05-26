@@ -108,96 +108,138 @@ hist(data$len, col = "slateblue1", main = "Histogram of Tooth Length", xlab = "T
 ### Hypotesis 1 - Relation between tooth length and the supplement used
 
 ``` r
-# Separate value vectors for analysis
+# Separate samples for analysis
 supp = data$supp
 
-len_by_OJ = data$len[supp == "OJ"] # Mean
-len_by_VC = data$len[supp == "VC"]
+len_by_OJ = data$len[supp == "OJ"] #sample_b
+len_by_VC = data$len[supp == "VC"] #sample_a
 
-# T-test: non-paired, variance based on approx of df, t < mean
-t.test(len_by_VC, len_by_OJ, conf.level = .95, var.equal = FALSE, paired = FALSE, alternative = "less")
+delta = abs(mean(len_by_OJ) - mean(len_by_VC))
+pooledsd = (sd(len_by_OJ) + sd(len_by_VC))/2
+t1_error = 0.05
+
+# Statistical Power
+
+power.t.test(n = length(len_by_VC), sig.level = t1_error, delta = delta, sd = pooledsd, alternative = "one.sided", type = "two.sample")$power
 ```
 
-    ## 
-    ##  Welch Two Sample t-test
-    ## 
-    ## data:  len_by_VC and len_by_OJ
-    ## t = -1.9153, df = 55.309, p-value = 0.03032
-    ## alternative hypothesis: true difference in means is less than 0
-    ## 95 percent confidence interval:
-    ##        -Inf -0.4682687
-    ## sample estimates:
-    ## mean of x mean of y 
-    ##  16.96333  20.66333
+    ## [1] 0.6024765
+
+The statistical power for the t-test is too low\!\! (below .80)
+
+The outcome of the t-test can result in a false positive\!
+
+``` r
+# The Null Hypothesis
+# H0: µa >= µb
+# The Alternative Hypothesis
+# Ha: µa < µb
+
+# T-test: non-paired, variance based on approx of df, µa < H0
+t.test(len_by_VC, len_by_OJ, conf.level = .95, var.equal = TRUE, paired = FALSE, alternative = "less")$p.value
+```
+
+    ## [1] 0.03019669
 
 The p-value shows strong evidence to reject the null hypothesis (pval \<
-0.05), indicating there is correlation between the tooth length and the
-supplement used.
+0.05), indicating high significance for the alternative hypothesis
+between the tooth length and the supplement used.
 
 ### Hypothesis Conclusion
 
-We can confirm with a 95% confidence interval that, for the true population distribution, the tooth length by
-using Vitamin C across all dosages is less than that of Orange Juice,
-implying that the type of supplement used may affect the tooth length. 
-
-Alternatively, we can imply that the p-value for this observation is too high in relation to the threshold, meaning that this statement can be a false positive.
+We can imply that the p-value for this observation is too high in
+relation to the threshold, and the statistical power of the analysis is
+too low, meaning that the alternative hypothesis may be a false
+positive.
 
 ### Hypothesis 2 - Comparing tooth growth by dose
 
 ``` r
-# Separate value vectors for analysis
-half = data$len[data$dose == .5]
-one = data$len[data$dose == 1] # Mean
-two = data$len[data$dose == 2]
+# Separate samples for analysis
+half = data$len[data$dose == .5] # sample_a
+one = data$len[data$dose == 1] # sample_b
+two = data$len[data$dose == 2] # sample_c
 
-# Dose one is considered the mean sample for testing
-
-# T-test, non-paired, var by approx of df, t < mean
-t.test(half, one, alternative = "less", paired = FALSE, var.equal = FALSE, conf.level = .95)
+length(half) == length(one)
 ```
 
-    ## 
-    ##  Welch Two Sample t-test
-    ## 
-    ## data:  half and one
-    ## t = -6.4766, df = 37.986, p-value = 6.342e-08
-    ## alternative hypothesis: true difference in means is less than 0
-    ## 95 percent confidence interval:
-    ##       -Inf -6.753323
-    ## sample estimates:
-    ## mean of x mean of y 
-    ##    10.605    19.735
-
-The p-value shows strong evidence to reject the null hypothesis (pval \<
-0.05), indicating there is correlation between lower supplement doses
-and tooth length.
+    ## [1] TRUE
 
 ``` r
-# T-test, non-paired, var by approx of df, t > mean
-t.test(two, one, alternative = "greater", paired = FALSE, var.equal = FALSE, conf.level = .95)
+delta = abs(mean(half) - mean(one))
+pooledsd = (sd(half) + sd(one))/2
+t1_error = 0.05
+
+# Statistical Power
+
+power.t.test(n = length(half), sig.level = t1_error, delta = delta, sd = pooledsd, alternative = "one.sided", type = "two.sample")$power
 ```
 
-    ## 
-    ##  Welch Two Sample t-test
-    ## 
-    ## data:  two and one
-    ## t = 4.9005, df = 37.101, p-value = 9.532e-06
-    ## alternative hypothesis: true difference in means is greater than 0
-    ## 95 percent confidence interval:
-    ##  4.17387     Inf
-    ## sample estimates:
-    ## mean of x mean of y 
-    ##    26.100    19.735
+    ## [1] 0.9999988
+
+Very high Statistical Power, meaning the outcome of the t-test is very
+accurate\!\!
+
+``` r
+# The Null Hypothesis
+# H0: µa >= µb
+# The Alternative Hypothesis
+# Ha: µa < µb
+
+# T-test, non-paired, var by approx of df, µa < µb
+t.test(half, one, alternative = "less", paired = FALSE, var.equal = TRUE, conf.level = .95)$p.value
+```
+
+    ## [1] 6.331485e-08
 
 The p-value shows strong evidence to reject the null hypothesis (pval \<
-0.05), indicating there is correlation between higher supplement doses
-and tooth length.
+0.05), indicating proof for the alternative hypothesis between lower
+supplement doses and tooth length.
+
+``` r
+length(two) == length(one)
+```
+
+    ## [1] TRUE
+
+``` r
+delta = abs(mean(two) - mean(one))
+pooledsd = (sd(two) + sd(one))/2
+t1_error = 0.05
+
+# Statistical Power
+
+power.t.test(n = length(two), sig.level = t1_error, delta = delta, sd = pooledsd, alternative = "one.sided", type = "two.sample")$power
+```
+
+    ## [1] 0.9992657
+
+Very high Statistical Power, meaning the outcome of the t-test is very
+accurate\!\!
+
+``` r
+# The Null Hypothesis
+# H0: µc <= µb
+# The Alternative Hypothesis
+# Ha: µc > µb
+
+# T-test, non-paired, var by approx of df, µc > µb
+t.test(two, one, alternative = "greater", paired = FALSE, var.equal = TRUE, conf.level = .95)$p.value
+```
+
+    ## [1] 9.054143e-06
+
+The p-value shows strong evidence to reject the null hypothesis (pval \<
+0.05), indicating proof for the alternative hypothesis between higher
+supplement doses and tooth length.
 
 ### Hypothesis Conclusion
 
-We can confirm with a 95% confidence interval that, for the true population distribution, the supplement dosage interferes with tooth growth.
+We can confirm with a 95% confidence interval that, for the true
+population distribution, the supplement dosage level interfere with
+tooth growth.
 
-We can visualize this statement as the plot shows:
+We can visualize this statement in the following plot:
 
 ``` r
 ggplot(data, aes(dose, len, group = supp, fill = supp)) +
